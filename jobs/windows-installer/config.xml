@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>This job will build the OpenGeo Suite windows installer.</description>
+  <keepDependencies>false</keepDependencies>
+  <creationTime>0</creationTime>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>DIST_PATH</name>
+          <description>Distribution path from which to pull built artifacts. Artifacts are pulled down from http://builds.opengeo.org/&lt;DIST_PATH&gt;/.</description>
+          <defaultValue>latest</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>REVISION</name>
+          <description>The git revision number of the build.  This value determines which artifacts are downloaded from http://builds.opengeo.org/&lt;DIST_PATH&gt;. </description>
+          <defaultValue>latest</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>PROFILE</name>
+          <description>The profile of the build. e.g. &quot;ee&quot; for enterprise.</description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ALIAS</name>
+          <description>Git revision alias. If the revision corresponds to a branch or a tag the alias will be the name of the branch/tag. Otherwise it will be &quot;latest&quot;.</description>
+          <defaultValue>latest</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM">
+    <configVersion>1</configVersion>
+    <remoteRepositories>
+      <RemoteConfig>
+        <name>origin</name>
+        <uris>
+          <org.eclipse.jgit.transport.URIish>
+            <scheme>git</scheme>
+            <path>/opengeo/suite.git</path>
+            <port>-1</port>
+            <host>github.com</host>
+          </org.eclipse.jgit.transport.URIish>
+        </uris>
+        <pushURIs/>
+        <fetch>
+          <org.eclipse.jgit.transport.RefSpec>
+            <force>true</force>
+            <wildcard>true</wildcard>
+            <srcName>refs/heads/*</srcName>
+            <dstName>refs/remotes/origin/*</dstName>
+          </org.eclipse.jgit.transport.RefSpec>
+        </fetch>
+        <push/>
+        <uploadpack>git-upload-pack</uploadpack>
+        <receivepack>git-receive-pack</receivepack>
+        <tagopt>AUTO_FOLLOW</tagopt>
+        <mirror>false</mirror>
+        <timeout>0</timeout>
+        <relativeTargetDir>repo</relativeTargetDir>
+      </RemoteConfig>
+    </remoteRepositories>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <mergeOptions/>
+    <recursiveSubmodules>false</recursiveSubmodules>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <authorOrCommitter>false</authorOrCommitter>
+    <clean>false</clean>
+    <wipeOutWorkspace>false</wipeOutWorkspace>
+    <pruneBranches>false</pruneBranches>
+    <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
+    <gitTool>Default</gitTool>
+    <submoduleCfg class="list"/>
+    <excludedRegions></excludedRegions>
+    <excludedUsers></excludedUsers>
+    <gitConfigName></gitConfigName>
+    <gitConfigEmail></gitConfigEmail>
+    <skipTag>true</skipTag>
+  </scm>
+  <advancedAffinityChooser>false</advancedAffinityChooser>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector"/>
+  <concurrentBuild>false</concurrentBuild>
+  <cleanWorkspaceRequired>false</cleanWorkspaceRequired>
+  <builders>
+    <hudson.tasks.BatchFile>
+      <command>@echo off
+echo Welcome to the OpenGeo Suite Windows installer build process!
+
+cd repo\installer\windows
+call hudson.bat %dist_path% %revision% %alias% %profile%</command>
+    </hudson.tasks.BatchFile>
+  </builders>
+  <publishers>
+    <hudson.tasks.Mailer>
+      <recipients>builds@opengeo.org</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
+  <buildWrappers/>
+</project>
