@@ -20,11 +20,7 @@
   <triggers class="vector"/>
   <concurrentBuild>false</concurrentBuild>
   <cleanWorkspaceRequired>false</cleanWorkspaceRequired>
-  <builders>
-    <hudson.tasks.Shell>
-      <command>./build_${JOB_NAME}.sh</command>
-    </hudson.tasks.Shell>
-  </builders>
+  <builders/>
   <publishers>
     <hudson.tasks.BuildTrigger>
       <childProjects>proj,geos,pgsql</childProjects>
